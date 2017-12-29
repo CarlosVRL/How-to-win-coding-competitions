@@ -1,10 +1,11 @@
-## Target ##
-EXECUTABLE = AplusB
-OUTPUT_PATH = ./target
-	
 ## Source Files ##
 SOURCES = AplusB.cpp
+
+## Object Files ##
 OBJECTS = $(SOURCES:.cpp=.o)
+
+## Target ##
+EXECUTABLE = a
 
 ## Compiler Options ##
 CC = g++
@@ -15,11 +16,11 @@ LDFLAGS =
 all: $(EXECUTABLE)
 	
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(OUTPUT_PATH)/$@
+	$(CC) $(OBJECTS) -o $@
 	
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
 
 .PHONY: clean
 clean:
-	$(RM) *o $(OUTPUT_PATH)/$(EXECUTABLE)
+	$(RM) *o $(EXECUTABLE)
