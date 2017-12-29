@@ -1,7 +1,6 @@
 /**
  * A + B
  */
-#include <iostream>
 #include <fstream>
 
 using namespace std;

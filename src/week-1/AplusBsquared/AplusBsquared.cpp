@@ -1,7 +1,6 @@
 /**
  * A + B ^ 2
  */
-#include <iostream>
 #include <fstream>
 #include <cmath>
 
