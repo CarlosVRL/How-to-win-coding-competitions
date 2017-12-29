@@ -2,7 +2,6 @@
  * Prepare Yourself to Competitions!
  */
 #include <cmath>
-#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -26,8 +25,10 @@ static const int EOL = MAX_COUNT * (4 + 1); // Max integer size + white space
 /**
  * Prototypes
  */
+int getLargestOfTwo(int x, int y);
 int getIntFromStream(ifstream& ifs);
 vector<int>& exhaustIntsFromStream(vector<int>& buf, ifstream& ifs);
+int trackOptimalUse(int x, int y, int optimum, bool& xIsUsed, bool& yIsUsed);
 
 /**
  * Main
@@ -35,55 +36,47 @@ vector<int>& exhaustIntsFromStream(vector<int>& buf, ifstream& ifs);
 int main(void)
 {
     // Containers
-    int n, sum, t_used, p_used;
-    vector<int> t, p, d;
+    vector<int> t, p;
+    int n = 0, sum = 0;
+    bool t_used = false;
+    bool p_used = false;
     
     // Gather input data
     n = getIntFromStream(fin);
     t = exhaustIntsFromStream(t, fin);
     p = exhaustIntsFromStream(p, fin);
     
-    // Calculate deltas
-    int min_index = 0;
-    int min_delta = MAX_VAL * 2;
+    // Minimum delta strategy
+    int diff = MAX_VAL * 2;
     for (int i = 0; i < n; ++i)
     {
-        int delta = t[i] - p[i];
-        
-        if (delta >= 0)
-        {
-            sum += t[i];
-            t_used++;
-        }
-        else
-        {
-            sum += p[i];
-            p_used++;
-        }
-        
-        // Absolute value of set delta tracks optimization point
-        d.push_back(delta);
-        if (abs(delta) < min_delta)
-        {
-            min_delta = abs(delta);
-            min_index = i;
-        }
+        sum += getLargestOfTwo(t[i], p[i]);
+        diff = trackOptimalUse(t[i], p[i], diff, t_used, p_used);
     }
     
     // Apply correction, if necessary
-    if (t_used == 0)
-    {
-        // t_i < p_i for all i hence d_i < 0
-        sum += d[min_index];
-    }
-    else if (p_used == 0)
-    {
-        // t_i >= p_i for all i hence d_i > 0
-        sum -= d[min_index];
-    }
+    if (!t_used || !p_used)
+        sum -= diff;
     
     fout << sum << endl;
+    
     return EXIT_SUCCESS;
+}
+
+/**
+ * Return the largest positive value
+ */
+int getLargestOfTwo(int x, int y)
+{
+    int delta = x - y;
+    if (delta >= 0)
+    {
+        return x;
+    }
+    else
+    {
+        return y;
+    }
 }
 
 /**
@@ -117,4 +110,28 @@ vector<int>& exhaustIntsFromStream(vector<int>& buf, ifstream& ifs)
         buf.push_back(val);
     }
     return buf;
+}
+
+/**
+ * Maintains optimum delta and tracks parameter usage
+ */
+int trackOptimalUse(int x, int y, int optimum, bool& xIsUsed, bool& yIsUsed)
+{
+    int res, delta;
+    
+    delta = x - y;
+    
+    // Track usage
+    if (delta >= 0)
+        xIsUsed = true;
+    else
+        yIsUsed = true;
+    
+    // Track minimum
+    if (abs(delta) < optimum)
+        res = abs(delta);
+    else
+        res = optimum;
+    
+    return res;
 }
