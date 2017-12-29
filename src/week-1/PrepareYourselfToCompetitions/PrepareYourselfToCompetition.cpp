@@ -1,6 +1,7 @@
 /**
  * Prepare Yourself to Competitions!
  */
+#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -28,22 +29,60 @@ static const int EOL = MAX_COUNT * (4 + 1); // Max integer size + white space
 int getIntFromStream(ifstream& ifs);
 vector<int>& exhaustIntsFromStream(vector<int>& buf, ifstream& ifs);
 
-#define fout cout // Debug
-
 /**
  * Main
  */
 int main(void)
 {
     // Containers
-    int n;
-    vector<int> t, p;
+    int n, sum, t_used, p_used;
+    vector<int> t, p, d;
     
     // Gather input data
     n = getIntFromStream(fin);
     t = exhaustIntsFromStream(t, fin);
     p = exhaustIntsFromStream(p, fin);
     
+    // Calculate deltas
+    int min_index = 0;
+    int min_delta = MAX_VAL * 2;
+    for (int i = 0; i < n; ++i)
+    {
+        int delta = t[i] - p[i];
+        
+        if (delta >= 0)
+        {
+            sum += t[i];
+            t_used++;
+        }
+        else
+        {
+            sum += p[i];
+            p_used++;
+        }
+        
+        // Absolute value of set delta tracks optimization point
+        d.push_back(delta);
+        if (abs(delta) < min_delta)
+        {
+            min_delta = abs(delta);
+            min_index = i;
+        }
+    }
+    
+    // Apply correction, if necessary
+    if (t_used == 0)
+    {
+        // t_i < p_i for all i hence d_i < 0
+        sum += d[min_index];
+    }
+    else if (p_used == 0)
+    {
+        // t_i >= p_i for all i hence d_i > 0
+        sum -= d[min_index];
+    }
+    
+    fout << sum << endl;
     return EXIT_SUCCESS;
 }
 
