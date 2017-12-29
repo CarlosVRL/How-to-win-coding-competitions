@@ -2,7 +2,6 @@
  * A + B ^ 2
  */
 #include <fstream>
-#include <cmath>
 
 using namespace std;
 
