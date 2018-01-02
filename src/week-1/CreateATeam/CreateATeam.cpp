@@ -3,6 +3,7 @@
  */
 #include <fstream>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -23,8 +24,8 @@ const int ROW_SIZE = 3;
  */
 void populateRoles(int matrix[ROW_SIZE][COL_SIZE]);
 void printRoles(int matrix[ROW_SIZE][COL_SIZE]);
-
-#define fout cout
+double calculateOptimumDistribution(int matrix[ROW_SIZE][COL_SIZE]);
+double calculateEfficiency(int a, int b, int c);
 
 /**
  * Main
@@ -35,8 +36,10 @@ int main(void)
     int roles[ROW_SIZE][COL_SIZE];
     populateRoles(roles);
     
-    // Debug Print
-    printRoles(roles);
+    // Algorithm Strategy: Cycle All Possibilities
+    double res = calculateOptimumDistribution(roles);
+    
+    fout << res << endl;
     
     return EXIT_SUCCESS;
 }
@@ -62,8 +65,46 @@ void printRoles(int matrix[ROW_SIZE][COL_SIZE])
     {
         for (int j = 0; j < COL_SIZE; ++j)
         {
-            cout << "value: " << matrix[i][j] << endl;
+            fout << "value: " << matrix[i][j] << endl;
         }
     }
     return;
+}
+
+double calculateOptimumDistribution(int matrix[ROW_SIZE][COL_SIZE])
+{
+    // Containers
+    int a, b, c;
+    double tmp, opt;
+    
+    // Primary loop is over the First Row Values (Person A Power)
+    for (int i = 0; i < COL_SIZE; ++i)
+    {
+        a = matrix[0][i];
+        
+        // Secondary loop is over the 2nd Row Values (Person B Power)
+        for (int j = 0; j < COL_SIZE; ++j)
+        {
+            // skip value taken by A
+            if (j == i) continue;
+            b = matrix[1][j];
+            
+            // Final loop is over the 3rd Row Values (Person C Power)
+            for (int k = 0; k < COL_SIZE; ++k)
+            {
+                // skip values taken by A and B
+                if (k == i || k == j) continue;
+                c = matrix[2][k];
+                
+                tmp = calculateEfficiency(a, b, c);
+                if (tmp > opt) opt = tmp;
+            }
+        }
+    }
+    return opt;
+}
+
+double calculateEfficiency(int a, int b, int c)
+{
+    return sqrt(a*a + b*b + c*c);
 }
