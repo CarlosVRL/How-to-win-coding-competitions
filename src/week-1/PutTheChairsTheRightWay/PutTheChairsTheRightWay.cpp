@@ -3,8 +3,6 @@
  */
 #include <fstream>
 #include <iomanip>
-#include <iostream>
-#include <math.h>
 
 using namespace std;
 
@@ -17,21 +15,21 @@ ofstream fout("output.txt");
 /**
  * Constants
  */
-
-/**
- * Prototypes
- */
+const int DIVISOR = 6;
 
 /**
  * Main
  */
 int main(void)
 {
-    fout << "out" << endl;
+    // Solution by mid-point theorem
+    double a, b, c, res;
+    
+    fin >> a >> b >> c;
+    
+    res = (a + b + c) / DIVISOR;
+    
+    fout << setprecision(15) << res << endl;
     
     return EXIT_SUCCESS;
 }
-
-/**
- * Functions
- */
