@@ -2,6 +2,7 @@
  * Create a Team!
  */
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <math.h>
 
@@ -39,6 +40,7 @@ int main(void)
     // Algorithm Strategy: Cycle All Possibilities
     double res = calculateOptimumDistribution(roles);
     
+    fout << setprecision(15);
     fout << res << endl;
     
     return EXIT_SUCCESS;
