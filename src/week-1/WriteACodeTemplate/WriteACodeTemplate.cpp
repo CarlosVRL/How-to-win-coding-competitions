@@ -20,7 +20,7 @@ ofstream fout("output.txt");
  */
 int main(void)
 {
-    // Parse new lines
+    // Parse template
     
     // Match on Logic
     
