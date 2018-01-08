@@ -14,7 +14,7 @@ ofstream fout("output.txt");
 /**
  * Constants
  */
-struct Dimension {
+struct Keyboard {
     int width;
     int height;
 };
@@ -25,6 +25,7 @@ struct Dimension {
 int main(void)
 {
     // Parse template
+    Keyboard keyboard = initializeKeyboard(fin);
     
     // Match on Logic
     
